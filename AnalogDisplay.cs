@@ -24,6 +24,7 @@ namespace Celeste.Mod.AnalogViewer
             int arrowY = (int) Math.Round((float) Engine.Instance.GraphicsDevice.PresentationParameters.BackBufferHeight / (float) 2);
             int y = 200;
             Vector2 arrow = new Vector2(arrowX, arrowY);
+            Vector2 offset = Vector2.Zero;
             GamePadDeadZone deadZone;
             Level level = SceneAs<Level>();
 
@@ -35,6 +36,7 @@ namespace Celeste.Mod.AnalogViewer
                 DrawText(GetAnalogAngle(deadZone), angleX, y);
                 MTexture icon = GetIcon();
                 if (level.Tracker.GetEntity<Player>() != null) { arrow = level.WorldToScreen(level.Tracker.GetEntity<Player>().TopLeft); }
+                arrow = Vector2.Add(arrow, GetAnalogCoordinatesVec2(deadZone) * 100);
                 icon?.Draw(arrow, Vector2.Zero, Color.White, ActiveFont.LineHeight / icon.Height);
                 y += 75;
             }
@@ -61,6 +63,12 @@ namespace Celeste.Mod.AnalogViewer
         {
             GamePadState gamePadState = GamePad.GetState(0, DeadZoneConfig);
             return String.Format("({0:F2}, {1:F2})", gamePadState.ThumbSticks.Left.X, gamePadState.ThumbSticks.Left.Y);
+        }
+
+        private Vector2 GetAnalogCoordinatesVec2(GamePadDeadZone DeadZoneConfig = GamePadDeadZone.IndependentAxes)
+        {
+            GamePadState gamePadState = GamePad.GetState(0, DeadZoneConfig);
+            return new Vector2(gamePadState.ThumbSticks.Left.X, -gamePadState.ThumbSticks.Left.Y);
         }
 
         private String GetAnalogAngle(GamePadDeadZone DeadZoneConfig = GamePadDeadZone.IndependentAxes)
