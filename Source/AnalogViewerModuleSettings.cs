@@ -1,7 +1,5 @@
-﻿namespace Celeste.Mod.AnalogViewer
-{
-    public class AnalogViewerSettings : EverestModuleSettings
-    {
+namespace Celeste.Mod.AnalogViewer {
+    public class AnalogViewerModuleSettings : EverestModuleSettings {
         public bool Enabled { get; set; } = true;
 
         [SettingSubText("This is the dead zone method used by the game.")]
